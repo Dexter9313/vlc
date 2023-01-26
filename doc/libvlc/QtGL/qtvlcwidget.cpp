@@ -224,16 +224,6 @@ QtVLCWidget::~QtVLCWidget()
     cleanup();
 }
 
-QSize QtVLCWidget::minimumSizeHint() const
-{
-    return QSize(50, 50);
-}
-
-QSize QtVLCWidget::sizeHint() const
-{
-    return QSize(400, 400);
-}
-
 void QtVLCWidget::cleanup()
 {
     stop();
@@ -308,6 +298,15 @@ static const GLfloat g_vertex_buffer_data[] = {
 };
 static const GLushort g_element_buffer_data[] = { 0, 1, 2, 3 };
 
+void QtVLCWidget::keyPressEvent(QKeyEvent* e)
+{
+       if(e->key() == Qt::Key_Escape)
+       {
+               close();
+       }
+       QOpenGLWidget::keyPressEvent(e);
+}
+
 void QtVLCWidget::initializeGL()
 {
     // In this example the widget's corresponding top-level window can change
@@ -336,11 +335,13 @@ void QtVLCWidget::initializeGL()
 
     m_program->bindAttributeLocation("position", 0);
 
+	timer.start();
     emit contextReady(context());
 }
 
 void QtVLCWidget::paintGL()
 {
+	window()->setWindowTitle(QString("qtglvlc - ") + QString::number(1000 / timer.restart()) + "FPS");
     QOpenGLFunctions *GL = context()->functions();
     QOpenGLFramebufferObject *fbo = mVLC->getVideoFrame();
     if (fbo != nullptr && GL != nullptr)

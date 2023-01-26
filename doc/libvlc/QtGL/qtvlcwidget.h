@@ -4,6 +4,7 @@
 #include <QOpenGLWidget>
 #include <QOpenGLVertexArrayObject>
 #include <QOpenGLBuffer>
+#include <QElapsedTimer>
 
 QT_FORWARD_DECLARE_CLASS(QOpenGLShaderProgram)
 
@@ -15,9 +16,6 @@ public:
     QtVLCWidget(QWidget *parent = 0);
     ~QtVLCWidget();
 
-    QSize minimumSizeHint() const override;
-    QSize sizeHint() const override;
-
     bool playMedia(const char* url);
 
 signals:
@@ -27,6 +25,7 @@ public slots:
     void cleanup();
 
 protected:
+	void keyPressEvent(QKeyEvent* e) override;
     void initializeGL() override;
     void paintGL() override;
     void resizeGL(int width, int height) override;
@@ -43,6 +42,8 @@ private:
     struct libvlc_media_t* m_media = nullptr;
 
     QOpenGLBuffer vertexBuffer, vertexIndexBuffer;
+
+	QElapsedTimer timer;
 };
 
 #endif /* GLWIDGET_H */

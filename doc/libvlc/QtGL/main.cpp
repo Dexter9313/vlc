@@ -24,19 +24,8 @@ int main(int argc, char *argv[])
     fmt.setDepthBufferSize(24);
     QSurfaceFormat::setDefaultFormat(fmt);
 
-    QMainWindow mainWindow;
-
     QtVLCWidget *glWidget = new QtVLCWidget;
-    mainWindow.setCentralWidget(glWidget);
-
-    mainWindow.resize(mainWindow.sizeHint());
-    int desktopArea = QApplication::desktop()->width() *
-                     QApplication::desktop()->height();
-    int widgetArea = mainWindow.width() * mainWindow.height();
-    if (((float)widgetArea / (float)desktopArea) < 0.75f)
-        mainWindow.show();
-    else
-        mainWindow.showMaximized();
+	glWidget->show();
 
     glWidget->playMedia(argv[1]);
 
