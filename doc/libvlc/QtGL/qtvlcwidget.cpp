@@ -181,6 +181,10 @@ QtVLCWidget::QtVLCWidget(QWidget *parent)
       vertexBuffer(QOpenGLBuffer::VertexBuffer),
       vertexIndexBuffer(QOpenGLBuffer::IndexBuffer)
 {
+	auto f(format());
+	f.setSwapInterval(0);
+	setFormat(f);
+
     // --transparent causes the clear color to be transparent. Therefore, on systems that
     // support it, the widget will become transparent apart from the logo.
 
