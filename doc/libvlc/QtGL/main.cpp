@@ -13,6 +13,8 @@ Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin)
 
 #include "qtvlcwidget.h"
 
+#include <QTimer>
+
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
@@ -28,6 +30,12 @@ int main(int argc, char *argv[])
 	glWidget->show();
 
     glWidget->playMedia(argv[1]);
+
+	QTimer t;
+	t.setInterval(0);
+	QObject::connect(&t, &QTimer::timeout, [glWidget](){glWidget->update(); });
+	t.start();
+
 
     return app.exec();
 }

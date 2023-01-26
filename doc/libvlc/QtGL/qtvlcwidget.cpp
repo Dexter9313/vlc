@@ -127,7 +127,7 @@ public:
         VLCVideo* that = static_cast<VLCVideo*>(data);
         QMutexLocker locker(&that->m_text_lock);
         that->m_updated = true;
-        that->mWidget->update();
+        // that->mWidget->update();
         std::swap(that->m_idx_swap, that->m_idx_render);
         that->mBuffers[that->m_idx_render]->bind();
     }
@@ -177,7 +177,7 @@ private:
 
 
 QtVLCWidget::QtVLCWidget(QWidget *parent)
-    : QOpenGLWidget(parent),
+    : QOpenGLWindow(),
       vertexBuffer(QOpenGLBuffer::VertexBuffer),
       vertexIndexBuffer(QOpenGLBuffer::IndexBuffer)
 {
@@ -304,14 +304,14 @@ void QtVLCWidget::keyPressEvent(QKeyEvent* e)
        {
                close();
        }
-       QOpenGLWidget::keyPressEvent(e);
+       QOpenGLWindow::keyPressEvent(e);
 }
 
 void QtVLCWidget::initializeGL()
 {
     // In this example the widget's corresponding top-level window can change
     // several times during the widget's lifetime. Whenever this happens, the
-    // QOpenGLWidget's associated context is destroyed and a new one is created.
+    // QOpenGLWindow's associated context is destroyed and a new one is created.
     // Therefore we have to be prepared to clean up the resources on the
     // aboutToBeDestroyed() signal, instead of the destructor. The emission of
     // the signal will be followed by an invocation of initializeGL() where we
@@ -341,7 +341,7 @@ void QtVLCWidget::initializeGL()
 
 void QtVLCWidget::paintGL()
 {
-	window()->setWindowTitle(QString("qtglvlc - ") + QString::number(1000 / timer.restart()) + "FPS");
+	setTitle(QString("qtglvlc - ") + QString::number(1000 / timer.restart()) + "FPS");
     QOpenGLFunctions *GL = context()->functions();
     QOpenGLFramebufferObject *fbo = mVLC->getVideoFrame();
     if (fbo != nullptr && GL != nullptr)
